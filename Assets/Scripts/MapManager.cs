@@ -114,8 +114,6 @@ public class MapManager : MonoBehaviour
     }
     public void OnEquippedMoveClick(MoveSlot slot)
     {
-        Debug.Log("Selected move: " + (selectedMove != null ? selectedMove.name : "null"));
-        Debug.Log("Slot move: " + (slot.move != null ? slot.move.name : "null"));
         if (selectedMove == null || GameManager.instance.equippedMoves.Contains(selectedMove))
             return;
         for(int i = 0; i < GameManager.instance.equippedMoves.Count; i++)
