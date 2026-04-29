@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public RunConfig config = null;
     public List<Move> learnedMoves = new List<Move>();
     public List<Move> equippedMoves = new List<Move>();
+    public Monster currentMonster;
 
 
     void Awake()

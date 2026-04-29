@@ -55,6 +55,7 @@ public class MapManager : MonoBehaviour
     {
         for (int i = 0; i < config.monsters.Count; i++)
         {
+            encounters[i].GetComponent<EncounterButton>().monster = config.monsters[i];
             encounters[i].GetComponentInChildren<TextMeshProUGUI>().text = config.monsters[i].name;
         }
     }

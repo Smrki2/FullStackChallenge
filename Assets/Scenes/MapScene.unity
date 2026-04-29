@@ -973,6 +973,7 @@ GameObject:
   - component: {fileID: 612546454}
   - component: {fileID: 612546453}
   - component: {fileID: 612546452}
+  - component: {fileID: 612546455}
   m_Layer: 5
   m_Name: Monster4Button
   m_TagString: Untagged
@@ -1043,7 +1044,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 612546453}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 612546455}
+        m_TargetAssemblyTypeName: EncounterButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &612546453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,6 +1095,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612546450}
   m_CullTransparentMesh: 1
+--- !u!114 &612546455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612546450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17c7959cf5a94fba8e735f8f8dda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterButton
+  monster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!1 &617929959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,6 +1404,7 @@ GameObject:
   - component: {fileID: 647698541}
   - component: {fileID: 647698540}
   - component: {fileID: 647698539}
+  - component: {fileID: 647698542}
   m_Layer: 5
   m_Name: Monster3Button
   m_TagString: Untagged
@@ -1441,7 +1475,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 647698540}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 647698542}
+        m_TargetAssemblyTypeName: EncounterButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &647698540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1480,6 +1526,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647698537}
   m_CullTransparentMesh: 1
+--- !u!114 &647698542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647698537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17c7959cf5a94fba8e735f8f8dda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterButton
+  monster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!1 &713285833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3408,6 +3474,7 @@ GameObject:
   - component: {fileID: 1492321036}
   - component: {fileID: 1492321035}
   - component: {fileID: 1492321034}
+  - component: {fileID: 1492321037}
   m_Layer: 5
   m_Name: Monster2Button
   m_TagString: Untagged
@@ -3478,7 +3545,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1492321035}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1492321037}
+        m_TargetAssemblyTypeName: EncounterButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1492321035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3517,6 +3596,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492321032}
   m_CullTransparentMesh: 1
+--- !u!114 &1492321037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492321032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17c7959cf5a94fba8e735f8f8dda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterButton
+  monster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!1 &1524147259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4354,6 +4453,7 @@ GameObject:
   - component: {fileID: 1997692978}
   - component: {fileID: 1997692977}
   - component: {fileID: 1997692976}
+  - component: {fileID: 1997692979}
   m_Layer: 5
   m_Name: Monster5Button
   m_TagString: Untagged
@@ -4424,7 +4524,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1997692977}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1997692979}
+        m_TargetAssemblyTypeName: EncounterButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1997692977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4463,6 +4575,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1997692974}
   m_CullTransparentMesh: 1
+--- !u!114 &1997692979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997692974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17c7959cf5a94fba8e735f8f8dda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterButton
+  monster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!1 &2003715778
 GameObject:
   m_ObjectHideFlags: 0
@@ -4475,6 +4607,7 @@ GameObject:
   - component: {fileID: 2003715782}
   - component: {fileID: 2003715781}
   - component: {fileID: 2003715780}
+  - component: {fileID: 2003715783}
   m_Layer: 5
   m_Name: Monster1Button
   m_TagString: Untagged
@@ -4545,7 +4678,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2003715781}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2003715783}
+        m_TargetAssemblyTypeName: EncounterButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2003715781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4584,6 +4729,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003715778}
   m_CullTransparentMesh: 1
+--- !u!114 &2003715783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003715778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5d17c7959cf5a94fba8e735f8f8dda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EncounterButton
+  monster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!1 &2049261519
 GameObject:
   m_ObjectHideFlags: 0
@@ -4671,6 +4836,14 @@ MonoBehaviour:
     monsters: []
   learnedMoves: []
   equippedMoves: []
+  currentMonster:
+    attack: 0
+    defense: 0
+    hp: 0
+    id: 
+    magic: 0
+    moves: []
+    name: 
 --- !u!4 &2145653435
 Transform:
   m_ObjectHideFlags: 0
