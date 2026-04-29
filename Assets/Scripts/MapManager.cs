@@ -46,7 +46,6 @@ public class MapManager : MonoBehaviour
                 GameManager.instance.config = config;
                 PopulateEncounters(GameManager.instance.config);
                 GameManager.instance.EquipAndLearnDefaultMoves();
-                GameManager.instance.learnedMoves.Add(GameManager.instance.config.monsters[0].moves[0]);
                 ShowEquippedMoves(moves);
                 ShowEquippedMovesPanel(panelMoves);
             }
