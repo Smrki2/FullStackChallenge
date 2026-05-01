@@ -45,7 +45,7 @@ public class MapManager : MonoBehaviour
                 RunConfig config = JsonUtility.FromJson<RunConfig>(runConfig.downloadHandler.text);
                 GameManager.instance.config = config;
                 PopulateEncounters(GameManager.instance.config);
-                GameManager.instance.EquipAndLearnDefaultMoves();
+                FirstPlayerSetup(GameManager.instance.config);
                 ShowEquippedMoves(moves);
                 ShowEquippedMovesPanel(panelMoves);
             }
@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
             moveSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.equippedMoves[i].name;
         }
     }
-    private void ShowEquippedMovesPanel(Image[] moveSlots)
+    public void ShowEquippedMovesPanel(Image[] moveSlots)
     {
         for (int i = 0; i < GameManager.instance.equippedMoves.Count; i++)
         {
@@ -128,5 +128,11 @@ public class MapManager : MonoBehaviour
         }
         ShowEquippedMoves(moves);
         ShowEquippedMoves(panelMoves);
+    }
+    private void FirstPlayerSetup(RunConfig config)
+    {
+        GameManager.instance.EquipAndLearnDefaultMoves();
+        GameManager.instance.heroStats = config.hero.base_stats;
+        GameManager.instance.heroCurrentHealth = config.hero.base_stats.hp;
     }
 }

@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     public List<Move> learnedMoves = new List<Move>();
     public List<Move> equippedMoves = new List<Move>();
     public Monster currentMonster;
+    public Stats heroStats;
+    public int heroCurrentHealth;
+    public int heroLevel = 1;
+    public int heroXp = 0;
+
 
 
     void Awake()
