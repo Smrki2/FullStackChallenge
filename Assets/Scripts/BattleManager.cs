@@ -1,5 +1,8 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
@@ -9,7 +12,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject heroHealth;
     [SerializeField] private Image[] moves;
     private string showMonsterHealth;
-    private int monsterHealth;
+    enum Entity
+    {
+        Hero,
+        Monster
+    }
     
     void Start()
     {
@@ -18,9 +25,9 @@ public class BattleManager : MonoBehaviour
     }
     private void SetupMonster()
     {
-        monsterHealth = GameManager.instance.currentMonster.hp;
+        GameManager.instance.monsterCurrentHealth = GameManager.instance.currentMonster.hp;
         monsterName.text = GameManager.instance.currentMonster.name;
-        showMonsterHealth = GameManager.instance.currentMonster.hp +"/"+monsterHealth.ToString();
+        showMonsterHealth = GameManager.instance.monsterCurrentHealth.ToString() + "/"+ GameManager.instance.currentMonster.hp.ToString();
         monsterHealthText.text = showMonsterHealth;
     }
     private void SetupPlayer()
@@ -41,6 +48,271 @@ public class BattleManager : MonoBehaviour
     }
     public void OnMoveSelected(MoveSlot slot)
     {
+        ExecuteMove(slot.move, Entity.Hero);
+        TickEffects(Entity.Hero);
+        UpdateHealthUI();
+        CheckForDeath();
+        StartCoroutine(FetchMonsterMove());
+    }
+    private void ExecuteMove(Move move, Entity entity)
+    {
+        bool isHero = entity == Entity.Hero;
+        Stats monsterStats = new Stats();
+        monsterStats.hp = GameManager.instance.currentMonster.hp;
+        monsterStats.attack = GameManager.instance.currentMonster.attack;
+        monsterStats.defense = GameManager.instance.currentMonster.defense;
+        monsterStats.magic = GameManager.instance.currentMonster.magic;
+        Stats casterStats = isHero ? GameManager.instance.heroStats : monsterStats;
+        Stats targetStats = !isHero ? GameManager.instance.heroStats : monsterStats;
 
+        int damage = 0;
+        switch (move.effect)
+        {
+            case "damage":
+                {
+                    if (move.type == "physical")
+                    {
+                        damage = casterStats.attack + move.value - targetStats.defense;
+                        damage = Mathf.Max(0, damage);
+                    }
+                    else
+                    {
+                        damage = casterStats.magic + move.value;
+                    }
+                    if (isHero)
+                        GameManager.instance.monsterCurrentHealth -= damage;
+                    else
+                        GameManager.instance.heroCurrentHealth -= damage;
+                    break;
+                }
+            case "damage_debuff_defense":
+                {
+                    if (move.type == "physical")
+                    {
+                        damage = casterStats.attack + move.value - targetStats.defense;
+                        damage = Mathf.Max(0, damage);
+                    }
+                    else
+                    {
+                        damage = casterStats.magic + move.value;
+                    }
+                    if (damage > 0)
+                    {
+                        ActiveEffect effect = new ActiveEffect();
+                        effect.affectedStat = "defense";
+                        effect.value = -move.value;
+                        effect.turnsRemaining = 2;
+                        if (isHero)
+                        {
+                            GameManager.instance.monsterEffects.Add(effect);
+                            GameManager.instance.monsterCurrentHealth -= damage;
+                        }
+                        else
+                        {
+                            GameManager.instance.heroEffects.Add(effect);
+                            GameManager.instance.heroCurrentHealth -= damage;
+                        }
+                    }
+                    break;
+                }
+            case "damage_debuff_magic":
+                {
+                    if (move.type == "physical")
+                    {
+                        damage = casterStats.attack + move.value - targetStats.defense;
+                        damage = Mathf.Max(0, damage);
+                    }
+                    else
+                    {
+                        damage = casterStats.magic + move.value;
+                    }
+                    if (damage > 0)
+                    {
+                        ActiveEffect effect = new ActiveEffect();
+                        effect.affectedStat = "magic";
+                        effect.value = -move.value;
+                        effect.turnsRemaining = 2;
+                        if (isHero)
+                        {
+                            GameManager.instance.monsterEffects.Add(effect);
+                            GameManager.instance.monsterCurrentHealth -= damage;
+                        }
+                        else
+                        {
+                            GameManager.instance.heroEffects.Add(effect);
+                            GameManager.instance.heroCurrentHealth -= damage;
+                        }
+                    }
+                    break;
+                }
+            case "damage_heal":
+                {
+                    if (move.type == "physical")
+                    {
+                        damage = casterStats.attack + move.value - targetStats.defense;
+                        damage = Mathf.Max(0, damage);
+                    }
+                    else
+                    {
+                        damage = casterStats.magic + move.value;
+                    }
+                    if (isHero)
+                    {
+                        GameManager.instance.monsterCurrentHealth -= damage;
+                        GameManager.instance.heroCurrentHealth += damage;
+                        GameManager.instance.heroCurrentHealth = Mathf.Min(GameManager.instance.heroCurrentHealth, GameManager.instance.heroStats.hp);
+                    }
+                    else
+                    {
+                        GameManager.instance.heroCurrentHealth -= damage;
+                        GameManager.instance.monsterCurrentHealth += damage;
+                        GameManager.instance.monsterCurrentHealth = Mathf.Min(GameManager.instance.monsterCurrentHealth, GameManager.instance.currentMonster.hp);
+                    }
+                    break;
+                }
+            case "buff_attack":
+                {
+                    ActiveEffect effect = new ActiveEffect();
+                    effect.affectedStat = "attack";
+                    effect.value = move.value;
+                    effect.turnsRemaining = 2;
+                    if (isHero)
+                        GameManager.instance.heroEffects.Add(effect);
+                    else
+                        GameManager.instance.monsterEffects.Add(effect);
+                    break;
+                }
+            case "buff_defense":
+                {
+                    ActiveEffect effect = new ActiveEffect();
+                    effect.affectedStat = "defense";
+                    effect.value = move.value;
+                    effect.turnsRemaining = 2;
+                    if (isHero)
+                        GameManager.instance.heroEffects.Add(effect);
+                    else
+                        GameManager.instance.monsterEffects.Add(effect);
+                    break;
+                }
+            case "buff_magic":
+                {
+                    ActiveEffect effect = new ActiveEffect();
+                    effect.affectedStat = "magic";
+                    effect.value = move.value;
+                    effect.turnsRemaining = 2;
+                    if (isHero)
+                        GameManager.instance.heroEffects.Add(effect);
+                    else
+                        GameManager.instance.monsterEffects.Add(effect);
+                    break;
+                }
+            case "buff_magic_cost_hp":
+                {
+                    ActiveEffect effect = new ActiveEffect();
+                    effect.affectedStat = "magic";
+                    effect.value = move.value;
+                    effect.turnsRemaining = 2;
+                    damage = move.value;
+                    if (isHero)
+                    {
+                        GameManager.instance.heroEffects.Add(effect);
+                        GameManager.instance.heroCurrentHealth -= damage;
+                    }
+                    else
+                    {
+                        GameManager.instance.monsterEffects.Add(effect);
+                        GameManager.instance.monsterCurrentHealth -= damage;
+                    }
+                    break;
+                }
+            case "debuff_attack":
+                {
+                    ActiveEffect effect = new ActiveEffect();
+                    effect.affectedStat = "attack";
+                    effect.value = -move.value;
+                    effect.turnsRemaining = 2;
+                    if (isHero)
+                        GameManager.instance.monsterEffects.Add(effect);
+                    else
+                        GameManager.instance.heroEffects.Add(effect);
+                    break;
+                }
+            case "heal":
+                {
+                    int healAmount = casterStats.magic + move.value;
+                    if(isHero)
+                    {
+                        GameManager.instance.heroCurrentHealth += healAmount;
+                        GameManager.instance.heroCurrentHealth = Mathf.Min(GameManager.instance.heroCurrentHealth, GameManager.instance.heroStats.hp);
+                    }
+                    else
+                    {
+                        GameManager.instance.monsterCurrentHealth += healAmount;
+                        GameManager.instance.monsterCurrentHealth = Mathf.Min(GameManager.instance.monsterCurrentHealth, GameManager.instance.currentMonster.hp);
+                    }
+                    break;
+                }
+            default:
+                {
+                    Debug.Log("Unknown Effect: " + move.effect);
+                    break;
+                }
+        }
+    }
+    private void TickEffects(Entity entity)
+    {
+        bool isHero = entity == Entity.Hero;
+        if (isHero)
+        {
+            foreach (ActiveEffect effect in GameManager.instance.heroEffects)
+            {
+                effect.turnsRemaining--;
+            }
+            GameManager.instance.heroEffects.RemoveAll(effect => effect.turnsRemaining <= 0);
+        }
+        else
+        {
+            foreach (ActiveEffect effect in GameManager.instance.monsterEffects)
+            {
+                effect.turnsRemaining--;
+            }
+            GameManager.instance.monsterEffects.RemoveAll(effect => effect.turnsRemaining <= 0);
+        }
+    }
+    private void CheckForDeath()
+    {
+        if(GameManager.instance.monsterCurrentHealth <= 0)
+        {
+            SceneManager.LoadScene("PostBattleScene");
+        }
+        else if(GameManager.instance.heroCurrentHealth <= 0)
+        {
+            SceneManager.LoadScene("MapScene");
+        }
+    }
+    private void UpdateHealthUI()
+    {
+        monsterHealthText.text = GameManager.instance.monsterCurrentHealth + "/" + GameManager.instance.currentMonster.hp;
+        heroHealth.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.heroCurrentHealth + "/" + GameManager.instance.heroStats.hp;
+    }
+    private IEnumerator FetchMonsterMove()
+    {
+        string url = "http://localhost:5000/battle/monster-move?" +
+            "monster_id=" + GameManager.instance.currentMonster.id +
+            "&monster_hp=" + GameManager.instance.monsterCurrentHealth +
+            "&monster_max_hp=" + GameManager.instance.currentMonster.hp +
+            "&hero_hp=" + GameManager.instance.heroCurrentHealth;
+
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            MonsterMoveResponse response = JsonUtility.FromJson<MonsterMoveResponse>(request.downloadHandler.text);
+            ExecuteMove(response.move, Entity.Monster);
+            TickEffects(Entity.Monster);
+            UpdateHealthUI();
+            CheckForDeath();
+        }
     }
 }
