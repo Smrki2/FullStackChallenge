@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -62,8 +63,8 @@ public class BattleManager : MonoBehaviour
         monsterStats.attack = GameManager.instance.currentMonster.attack;
         monsterStats.defense = GameManager.instance.currentMonster.defense;
         monsterStats.magic = GameManager.instance.currentMonster.magic;
-        Stats casterStats = isHero ? GameManager.instance.heroStats : monsterStats;
-        Stats targetStats = !isHero ? GameManager.instance.heroStats : monsterStats;
+        Stats casterStats = isHero ? ApplyEffects(GameManager.instance.heroStats, GameManager.instance.heroEffects) : ApplyEffects(monsterStats, GameManager.instance.monsterEffects);
+        Stats targetStats = !isHero ? ApplyEffects(GameManager.instance.heroStats, GameManager.instance.heroEffects) : ApplyEffects(monsterStats, GameManager.instance.monsterEffects);
 
         int damage = 0;
         switch (move.effect)
@@ -314,5 +315,30 @@ public class BattleManager : MonoBehaviour
             UpdateHealthUI();
             CheckForDeath();
         }
+    }
+    private Stats ApplyEffects(Stats stats, List<ActiveEffect> effects)
+    {
+        Stats modified = new Stats();
+        modified.hp = stats.hp;
+        modified.attack = stats.attack;
+        modified.defense = stats.defense;
+        modified.magic = stats.magic;
+
+        foreach (ActiveEffect effect in effects)
+        {
+            switch (effect.affectedStat)
+            {
+                case "attack": 
+                    modified.attack += effect.value; 
+                    break;
+                case "defense": 
+                    modified.defense += effect.value; 
+                    break;
+                case "magic": 
+                    modified.magic += effect.value; 
+                    break;
+            }
+        }
+        return modified;
     }
 }
