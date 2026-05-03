@@ -1,4 +1,4 @@
-# RPG Gauntlet - Nordeus Full Stack Challenge
+# Nordeus Full Stack Challenge
 
 ## How to Run
 
