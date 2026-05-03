@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
     public Stats heroStats;
     public int heroCurrentHealth;
     public int heroLevel = 1;
-    public int heroXp = 0;
+    public int heroXp = 0; 
+    public Move lastLearnedMove;
+    public int currentMonsterIndex = 0;
+    public int lastFoughtMonsterIndex = 0;
 
 
 

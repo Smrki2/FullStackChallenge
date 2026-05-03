@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
@@ -56,6 +57,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < config.monsters.Count; i++)
         {
             encounters[i].GetComponent<EncounterButton>().monster = config.monsters[i];
+            encounters[i].GetComponent<EncounterButton>().monsterIndex = i;
             encounters[i].GetComponentInChildren<TextMeshProUGUI>().text = config.monsters[i].name;
         }
     }
@@ -63,6 +65,9 @@ public class MapManager : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.equippedMoves.Count; i++)
         {
+            Sprite icon = Object.FindAnyObjectByType<SpriteIconManager>().GetMoveSprite(GameManager.instance.equippedMoves[i].id); 
+            if (icon != null)
+                moveSlots[i].GetComponent<Image>().sprite = icon;
             MoveSlot slot = moveSlots[i].GetComponent<MoveSlot>();
             slot.move = GameManager.instance.equippedMoves[i];
             moveSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.equippedMoves[i].name;
@@ -72,6 +77,9 @@ public class MapManager : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.equippedMoves.Count; i++)
         {
+            Sprite icon = Object.FindAnyObjectByType<SpriteIconManager>().GetMoveSprite(GameManager.instance.equippedMoves[i].id);
+            if (icon != null)
+                moveSlots[i].GetComponent<Image>().sprite = icon;
             MoveSlot slot = moveSlots[i].GetComponent<MoveSlot>();
             slot.move = GameManager.instance.equippedMoves[i];
             moveSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.equippedMoves[i].name;
@@ -91,6 +99,11 @@ public class MapManager : MonoBehaviour
             MoveSlot slot = moveSlot.GetComponent<MoveSlot>();
             slot.move = move;
             moveSlot.GetComponentInChildren<TextMeshProUGUI>().text = move.name;
+
+            Sprite icon = Object.FindAnyObjectByType<SpriteIconManager>().GetMoveSprite(move.id);
+            if (icon != null)
+                moveSlot.GetComponent<Image>().sprite = icon;
+
             moveSlot.GetComponent<Button>().onClick.AddListener(() => OnLearnedMoveClick(slot));
         }
     }
@@ -134,5 +147,9 @@ public class MapManager : MonoBehaviour
         GameManager.instance.EquipAndLearnDefaultMoves();
         GameManager.instance.heroStats = config.hero.base_stats;
         GameManager.instance.heroCurrentHealth = config.hero.base_stats.hp;
+    }
+    public void OnExitClick()
+    {
+        SceneManager.LoadScene("MainMenuScene");
     }
 }

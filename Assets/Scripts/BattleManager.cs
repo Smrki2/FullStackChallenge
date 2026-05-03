@@ -13,6 +13,15 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject heroHealth;
     [SerializeField] private Image[] moves;
     private string showMonsterHealth;
+    [SerializeField] private Image monsterImage;
+    [SerializeField] private Sprite goblinWarriorSprite;
+    [SerializeField] private Sprite goblinMageSprite;
+    [SerializeField] private Sprite spiderSprite;
+    [SerializeField] private Sprite witchSprite;
+    [SerializeField] private Sprite dragonSprite;
+    [SerializeField] private Image heroHealthBar;
+    [SerializeField] private Image monsterHealthBar;
+
     enum Entity
     {
         Hero,
@@ -26,6 +35,8 @@ public class BattleManager : MonoBehaviour
     }
     private void SetupMonster()
     {
+        monsterImage.sprite = GetMonsterSprite(GameManager.instance.currentMonster.id);
+        GameManager.instance.monsterEffects.Clear();
         GameManager.instance.monsterCurrentHealth = GameManager.instance.currentMonster.hp;
         monsterName.text = GameManager.instance.currentMonster.name;
         showMonsterHealth = GameManager.instance.monsterCurrentHealth.ToString() + "/"+ GameManager.instance.currentMonster.hp.ToString();
@@ -33,6 +44,8 @@ public class BattleManager : MonoBehaviour
     }
     private void SetupPlayer()
     {
+        GameManager.instance.heroCurrentHealth = GameManager.instance.heroStats.hp;
+        GameManager.instance.heroEffects.Clear();
         heroHealth.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.heroCurrentHealth.ToString() + "/" + GameManager.instance.heroStats.hp.ToString();
         ShowEquippedMoves(moves);
     }
@@ -40,6 +53,9 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < GameManager.instance.equippedMoves.Count; i++)
         {
+            Sprite icon = Object.FindAnyObjectByType<SpriteIconManager>().GetMoveSprite(GameManager.instance.equippedMoves[i].id);
+            if (icon != null)
+                moveSlots[i].GetComponent<Image>().sprite = icon;
             MoveSlot slot = moveSlots[i].GetComponent<MoveSlot>();
             slot.move = GameManager.instance.equippedMoves[i];
             moveSlots[i].GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.equippedMoves[i].name;
@@ -284,6 +300,20 @@ public class BattleManager : MonoBehaviour
     {
         if(GameManager.instance.monsterCurrentHealth <= 0)
         {
+            GameManager.instance.currentMonsterIndex = Mathf.Max(GameManager.instance.currentMonsterIndex, GameManager.instance.lastFoughtMonsterIndex + 1);
+            GameManager.instance.heroXp += GameManager.instance.config.hero.xp_per_battle;
+            if (GameManager.instance.heroXp >= GameManager.instance.config.hero.xp_to_level_up)
+            {
+                GameManager.instance.heroXp -= GameManager.instance.config.hero.xp_to_level_up;
+                GameManager.instance.heroLevel++;
+                GameManager.instance.heroStats.hp += GameManager.instance.config.hero.level_up_stats.hp;
+                GameManager.instance.heroStats.attack += GameManager.instance.config.hero.level_up_stats.attack;
+                GameManager.instance.heroStats.defense += GameManager.instance.config.hero.level_up_stats.defense;
+                GameManager.instance.heroStats.magic += GameManager.instance.config.hero.level_up_stats.magic;
+            }
+            Move learnedMove = GameManager.instance.currentMonster.moves[Random.Range(0, GameManager.instance.currentMonster.moves.Count)];
+            GameManager.instance.AddMove(learnedMove);
+            GameManager.instance.lastLearnedMove = learnedMove;
             SceneManager.LoadScene("PostBattleScene");
         }
         else if(GameManager.instance.heroCurrentHealth <= 0)
@@ -295,6 +325,8 @@ public class BattleManager : MonoBehaviour
     {
         monsterHealthText.text = GameManager.instance.monsterCurrentHealth + "/" + GameManager.instance.currentMonster.hp;
         heroHealth.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.instance.heroCurrentHealth + "/" + GameManager.instance.heroStats.hp;
+        heroHealthBar.fillAmount = (float)GameManager.instance.heroCurrentHealth / GameManager.instance.heroStats.hp;
+        monsterHealthBar.fillAmount = (float)GameManager.instance.monsterCurrentHealth / GameManager.instance.currentMonster.hp;
     }
     private IEnumerator FetchMonsterMove()
     {
@@ -340,5 +372,17 @@ public class BattleManager : MonoBehaviour
             }
         }
         return modified;
+    }
+    private Sprite GetMonsterSprite(string monsterId)
+    {
+        switch (monsterId)
+        {
+            case "dragon": return dragonSprite;
+            case "witch": return witchSprite;
+            case "giant_spider": return spiderSprite;
+            case "goblin_warrior": return goblinWarriorSprite;
+            case "goblin_mage": return goblinMageSprite;
+            default: return null;
+        }
     }
 }
