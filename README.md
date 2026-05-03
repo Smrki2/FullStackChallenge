@@ -3,8 +3,10 @@
 ## How to Run
 
 ### Server
+```
 cd server
 py app.py
+```
 Server runs on http://localhost:5000
 
 ### Client
